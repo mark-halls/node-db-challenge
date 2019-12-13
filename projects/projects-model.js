@@ -15,13 +15,14 @@ const getProjects = () => {
 const getProjectById = id => {
   return db(`projects`)
     .where({ id })
+    .first()
     .then(project => {
       return { ...project, completed: convertCompleted(project.completed) };
     });
 };
 
 const getProjectTasks = projectId => {
-  return db(`project_tasks`)
+  return db(`project_tasks as p`)
     .where({ project_id: projectId })
     .innerJoin(`tasks as t`, `t.id`, `task_id`)
     .then(tasks =>
